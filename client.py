@@ -7,11 +7,12 @@ import threading
 import janus
 import queue
 import sys
+import requests
 
-
-#todo: write code for connecting to azure open ai services.
+# Deepgram Voice Agent Code using Azure OpenAI Services
 
 VOICE_AGENT_URL = "wss://agent.deepgram.com/agent"
+AZURE_URL = "YOUR_AZURE_URL"
 PROMPT = "You are a helpful assistant. Responses should be short and direct."
 VOICE = "aura-asteria-en"
 
@@ -38,9 +39,13 @@ SETTINGS = {
     "agent": {
         "listen": {"model": "nova-2"},
         "think": {
-            "provider": {"type": "open_ai"},
-            "model": "gpt-4o-mini",
-            "instructions": PROMPT,
+            "provider": {
+              "type": "custom",
+              "url": AZURE_URL, # your Azure OpenAI endpoint
+              "key": "AZURE_OPENAI_API_KEY", # your Azure OpenAI API key
+              "instructions": PROMPT,
+            }, # use custom as type
+            "model": "your_model", # your model from Azure OpenAI
         },
         "speak": {"model": VOICE},
     },
@@ -60,6 +65,11 @@ async def run():
         print("DEEPGRAM_API_KEY env var not present")
         return
 
+    azure_api_key = os.environ.get("AZURE_OPENAI_API_KEY")
+    if azure_api_key is None:
+        print("AZURE_OPENAI_API_KEY env var not present")
+        return
+
     async with websockets.connect(
         VOICE_AGENT_URL,
         extra_headers={"Authorization": f"Token {dg_api_key}"},
@@ -69,7 +79,7 @@ async def run():
             audio = pyaudio.PyAudio()
             stream = audio.open(
                 format=pyaudio.paInt16,
-                channels=1,
+
                 rate=USER_AUDIO_SAMPLE_RATE,
                 input=True,
                 frames_per_buffer=USER_AUDIO_SAMPLES_PER_CHUNK,
@@ -123,7 +133,7 @@ async def run():
 
 
 def main():
-    asyncio.get_event_loop().run_until_complete(run())
+    asyncio.run(run())
 
 
 def _play(audio_out, stream, stop):
