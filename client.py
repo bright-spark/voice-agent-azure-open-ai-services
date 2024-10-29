@@ -9,12 +9,26 @@ import queue
 import sys
 import requests
 
+# troubleshooting notes
+#if you tend to close your laptop versus shutting down each night, I would recommend that you restart. I know that portaudio is a little temperamental if it isnt shutdown correctly (ie doing a cntl + c for a break).
+
+# use postman to test the api key and endpoint
+
 # Deepgram Voice Agent Code using Azure OpenAI Services
 
+# Your Deepgram Voice Agent URL
 VOICE_AGENT_URL = "wss://agent.deepgram.com/agent"
-AZURE_URL = "YOUR_AZURE_URL"
-PROMPT = "You are a helpful assistant. Responses should be short and direct."
-VOICE = "aura-asteria-en"
+# Your Azure OpenAI endpoint
+AZURE_URL = "Your Azure OpenAI endpoint here."
+# Your Agent prompt
+# PROMPT = "You are a helpful assistant. Responses should be short and direct."
+PROMPT = "Your prompt here."
+# Your Deepgram TTS model
+VOICE = "aura-orion-en"
+# Your Deepgram STT model
+LISTEN = "nova-2"
+# Your model from Azure OpenAI Services
+LLM_MODEL = "gpt-4o-mini"
 
 USER_AUDIO_SAMPLE_RATE = 16000
 USER_AUDIO_SECS_PER_CHUNK = 0.05
@@ -37,18 +51,22 @@ SETTINGS = {
         },
     },
     "agent": {
-        "listen": {"model": "nova-2"},
+        "listen": {"model": LISTEN},
         "think": {
             "provider": {
-              "type": "custom",
-              "url": AZURE_URL, # your Azure OpenAI endpoint
-              "key": "AZURE_OPENAI_API_KEY", # your Azure OpenAI API key
+              "type": "openai",
+              "url": AZURE_URL,
+              "key": os.environ.get("AZURE_OPENAI_API_KEY"),
               "instructions": PROMPT,
-            }, # use custom as type
-            "model": "your_model", # your model from Azure OpenAI
+            },
+            "model": LLM_MODEL,
         },
         "speak": {"model": VOICE},
     },
+    "context": {
+     "messages": [], # LLM message history (e.g. to restore existing conversation if websocket connection breaks)
+    "replay": False # whether to replay the last message, if it is an assistant message
+               }
 }
 
 mic_audio_queue = asyncio.Queue()
@@ -84,6 +102,7 @@ async def run():
                 input=True,
                 frames_per_buffer=USER_AUDIO_SAMPLES_PER_CHUNK,
                 stream_callback=callback,
+                channels=1
             )
 
             stream.start_stream()
