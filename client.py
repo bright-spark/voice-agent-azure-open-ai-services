@@ -21,8 +21,9 @@ VOICE_AGENT_URL = "wss://agent.deepgram.com/agent"
 # Your Azure OpenAI endpoint
 AZURE_URL = "Your Azure OpenAI endpoint here."
 # Your Agent prompt
-# PROMPT = "You are a helpful assistant. Responses should be short and direct."
+
 PROMPT = "Your prompt here."
+
 # Your Deepgram TTS model
 VOICE = "aura-orion-en"
 # Your Deepgram STT model
