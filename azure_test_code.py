@@ -30,7 +30,7 @@ payload = {
 }
 
 # Use your Azure OpenAI endpoint
-ENDPOINT = "https://dg-test-openai.openai.azure.com/openai/deployments/gpt-4/chat/completions?api-version=2024-02-15-preview"
+ENDPOINT = "Your Azure OpenAI endpoint here."
 
 # Send request
 try:
