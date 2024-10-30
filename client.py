@@ -54,7 +54,7 @@ SETTINGS = {
         "listen": {"model": LISTEN},
         "think": {
             "provider": {
-              "type": "open_ai",
+              "type": "custom",
               "url": AZURE_URL,
               "key": os.environ.get("AZURE_OPENAI_API_KEY"),
               "instructions": PROMPT,
