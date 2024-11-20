@@ -2,7 +2,7 @@
 
  [![Discord](https://dcbadge.vercel.app/api/server/xWRaCDBtW4?style=flat)](https://discord.gg/xWRaCDBtW4)
 
-A repository template for open-source demos, guides and sample apps. Description here.
+A basic example of using Deepgram's Voice Agent API with OpenAI Azure.
 
 ## Getting an API Key
 
