@@ -88,10 +88,10 @@ async def run():
         print("DEEPGRAM_API_KEY env var not present")
         return
 
-    # azure_api_key = os.environ.get("AZURE_OPENAI_API_KEY")
-    # if azure_api_key is None:
-    #     print("AZURE_OPENAI_API_KEY env var not present")
-    #     return
+    azure_api_key = os.environ.get("AZURE_OPENAI_API_KEY")
+    if azure_api_key is None:
+        print("AZURE_OPENAI_API_KEY env var not present")
+        return
 
     async with websockets.connect(
         VOICE_AGENT_URL,
