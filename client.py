@@ -52,22 +52,26 @@ SETTINGS = {
         },
     },
     "agent": {
-        "listen": {"model": LISTEN},
+        "listen": {
+            "model": LISTEN
+        },
         "think": {
             "provider": {
               "type": "custom",
               "url": AZURE_URL,
               "key": os.environ.get("AZURE_OPENAI_API_KEY"),
-              "instructions": PROMPT,
             },
             "model": LLM_MODEL,
+            "instructions": PROMPT,
         },
-        "speak": {"model": VOICE},
+        "speak": {
+            "model": VOICE
+        },
     },
     "context": {
-     "messages": [], # LLM message history (e.g. to restore existing conversation if websocket connection breaks)
-    "replay": False # whether to replay the last message, if it is an assistant message
-               }
+        "messages": [], # LLM message history (e.g. to restore existing conversation if websocket connection breaks)
+        "replay": False # whether to replay the last message, if it is an assistant message
+    }
 }
 
 mic_audio_queue = asyncio.Queue()
@@ -84,10 +88,10 @@ async def run():
         print("DEEPGRAM_API_KEY env var not present")
         return
 
-    azure_api_key = os.environ.get("AZURE_OPENAI_API_KEY")
-    if azure_api_key is None:
-        print("AZURE_OPENAI_API_KEY env var not present")
-        return
+    # azure_api_key = os.environ.get("AZURE_OPENAI_API_KEY")
+    # if azure_api_key is None:
+    #     print("AZURE_OPENAI_API_KEY env var not present")
+    #     return
 
     async with websockets.connect(
         VOICE_AGENT_URL,
