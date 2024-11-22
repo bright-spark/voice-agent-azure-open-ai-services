@@ -59,7 +59,12 @@ SETTINGS = {
             "provider": {
               "type": "custom",
               "url": AZURE_URL,
-              "key": os.environ.get("AZURE_OPENAI_API_KEY"),
+              "headers": [
+                {
+                  "key": "api-key",
+                  "value": os.environ.get("AZURE_OPENAI_API_KEY")
+                }
+              ]
             },
             "model": LLM_MODEL,
             "instructions": PROMPT,
