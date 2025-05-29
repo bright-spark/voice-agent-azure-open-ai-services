@@ -14,7 +14,7 @@ You can learn more about the Deepgram API at [developers.deepgram.com](https://d
 
 ## Installation
 
-This is a Python client for interacting with Deepgram's Voice Agent API andd Azure OpenAI Services.
+This is a Python client for interacting with Deepgram's Voice Agent API and Azure OpenAI Services.
 
 ## Instructions
 
