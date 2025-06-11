@@ -15,28 +15,36 @@ import requests
 # use postman to test the api key and endpoint
 
 # Deepgram Voice Agent Code using Azure OpenAI Services
-
+DEEPGRAM_API_KEY = os.environ.get("DEEPGRAM_API_KEY")
+# Your Azure OpenAI API Key
+AZURE_OPENAI_API_KEY = os.environ.get("AZURE_OPENAI_API_KEY")
 # Your Deepgram Voice Agent URL
 VOICE_AGENT_URL = "wss://agent.deepgram.com/agent"
 # Your Azure OpenAI endpoint
-AZURE_URL = os.environ.get("AZURE_OPENAI_ENDPOINT")
+AZURE_URL = "https://raewyn.cognitiveservices.azure.com/openai/deployments/gpt-4o-mini"
 # Your Agent prompt
-
-PROMPT = os.environ.get("PROMPT")
+PROMPT = "You are a helpful Deepgram AI voice assistant speaking to a human."
+# Your greeting
+GREETING = "Hello! How can I help you today?"
 
 # Your Deepgram TTS model
 VOICE = "aura-orion-en"
 # Your Deepgram STT model
 LISTEN = "nova-2"
+
 # Your model from Azure OpenAI Services
-LLM_MODEL = os.environ.get("LLM_MODEL")
+LLM_MODEL = "gpt-4o-mini"
+# Your temperature
+TEMPERATURE = "0.7"
 
-USER_AUDIO_SAMPLE_RATE = os.environ.get("USER_AUDIO_SAMPLE_RATE")
-USER_AUDIO_SECS_PER_CHUNK = os.environ.get("USER_AUDIO_SECS_PER_CHUNK")
+# Your audio settings
+USER_AUDIO_SAMPLE_RATE = "16000"
+USER_AUDIO_SECS_PER_CHUNK = "0.2"
 USER_AUDIO_SAMPLES_PER_CHUNK = round(USER_AUDIO_SAMPLE_RATE * USER_AUDIO_SECS_PER_CHUNK)
-
-AGENT_AUDIO_SAMPLE_RATE = os.environ.get("AGENT_AUDIO_SAMPLE_RATE")
+AGENT_AUDIO_SAMPLE_RATE = "16000"
 AGENT_AUDIO_BYTES_PER_SEC = 2 * AGENT_AUDIO_SAMPLE_RATE
+AGENT_AUDIO_BITRATE = "128000"
+ENCODING = "linear16"
 
 SETTINGS = {
   "type": "Settings",
@@ -44,13 +52,13 @@ SETTINGS = {
   "mip_opt_out": false,
   "audio": {
     "input": {
-      "encoding": "linear16",
-      "sample_rate": os.environ.get("USER_AUDIO_SAMPLE_RATE")
+      "encoding": ENCODING,
+      "sample_rate": USER_AUDIO_SAMPLE_RATE
     },
     "output": {
       "encoding": "mp3",
-      "sample_rate": os.environ.get("AGENT_AUDIO_SAMPLE_RATE"),
-      "bitrate": os.environ.get("AGENT_AUDIO_BITRATE"),
+      "sample_rate": AGENT_AUDIO_SAMPLE_RATE,
+      "bitrate": AGENT_AUDIO_BITRATE,
       "container": "none"
     }
   },
@@ -59,32 +67,30 @@ SETTINGS = {
     "listen": {
       "provider": {
         "type": "deepgram",
-        "model": os.environ.get("LISTEN"), # TODO model
-        "keyterms": ["hello", "goodbye"]
+        "model": LISTEN,
       }
     },
     "think": {
       "provider": {
         "type": "custom",
-        "model": os.environ.get("LLM_MODEL"),
-        "temperature": os.environ.get("TEMPERATURE")
+        "model": LLM_MODEL,
+        "temperature": TEMPERATURE
       },
       "endpoint": { # Optional for non-Deepgram LLM providers. When present, must include url field and headers object
-        "url": os.environ.get("AZURE_OPENAI_ENDPOINT"),
+        "url": "https://raewyn.cognitiveservices.azure.com/openai/deployments/gpt-4o-mini",
         "headers": [
           {
             "key": "api-key",
-            "value": os.environ.get("AZURE_OPENAI_API_KEY")
+            "value": AZURE_OPENAI_API_KEY
           }
         ]
       },
-      "instructions": os.environ.get("PROMPT"), # TODO prompt
-      # "context_length": os.environ.get("CONTEXT_LENGTH"),  # Optional and can only be used when a custom think endpoint is used. Use max for maximum context length
+      "instructions": PROMPT,
     },
     "speak": {
-      "model": os.environ.get("VOICE"),
+      "model": VOICE,
     },
-    "greeting": "Hello! How can I help you today?"
+    "greeting": GREETING
   }
 }
 
@@ -97,12 +103,12 @@ def callback(input_data, frame_count, time_info, status_flag):
 
 
 async def run():
-    dg_api_key = os.environ.get("DEEPGRAM_API_KEY")
+    dg_api_key = DEEPGRAM_API_KEY
     if dg_api_key is None:
         print("DEEPGRAM_API_KEY env var not present")
         return
 
-    azure_api_key = os.environ.get("AZURE_OPENAI_API_KEY")
+    azure_api_key = AZURE_OPENAI_API_KEY
     if azure_api_key is None:
         print("AZURE_OPENAI_API_KEY env var not present")
         return

@@ -48,7 +48,6 @@ This is a Python client for interacting with Deepgram's Voice Agent API and Azur
 
 5. Start talking into your mic. This client doesn't have echo cancellation; you'll want to use headphones so the agent doesn't hear itself and think it's user speech.
 
-### Code Style
 
 ## Development and Contributing
 
