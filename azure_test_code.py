@@ -1,5 +1,8 @@
 import os
 import requests
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Use this code to test your Azure OpenAI API key.
 
@@ -19,18 +22,18 @@ payload = {
       "content": [
         {
           "type": "text",
-          "text": "You are an AI assistant that helps people find information."
+          "text": os.environ.get("PROMPT")
         }
       ]
     }
   ],
-  "temperature": 0.7,
-  "top_p": 0.95,
-  "max_tokens": 800
+  "temperature": os.environ.get("TEMPERATURE"),
+  "top_p": os.environ.get("TOP_P"),
+  "max_tokens": os.environ.get("MAX_TOKENS")
 }
 
 # Use your Azure OpenAI endpoint
-ENDPOINT = "Your Azure OpenAI endpoint here."
+ENDPOINT = os.environ.get("AZURE_OPENAI_ENDPOINT")
 
 # Send request
 try:

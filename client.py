@@ -19,64 +19,73 @@ import requests
 # Your Deepgram Voice Agent URL
 VOICE_AGENT_URL = "wss://agent.deepgram.com/agent"
 # Your Azure OpenAI endpoint
-AZURE_URL = "Your Azure OpenAI endpoint here."
+AZURE_URL = os.environ.get("AZURE_OPENAI_ENDPOINT")
 # Your Agent prompt
 
-PROMPT = "Your prompt here."
+PROMPT = os.environ.get("PROMPT")
 
 # Your Deepgram TTS model
 VOICE = "aura-orion-en"
 # Your Deepgram STT model
 LISTEN = "nova-2"
 # Your model from Azure OpenAI Services
-LLM_MODEL = "gpt-4o-mini"
+LLM_MODEL = os.environ.get("LLM_MODEL")
 
-USER_AUDIO_SAMPLE_RATE = 16000
-USER_AUDIO_SECS_PER_CHUNK = 0.05
+USER_AUDIO_SAMPLE_RATE = os.environ.get("USER_AUDIO_SAMPLE_RATE")
+USER_AUDIO_SECS_PER_CHUNK = os.environ.get("USER_AUDIO_SECS_PER_CHUNK")
 USER_AUDIO_SAMPLES_PER_CHUNK = round(USER_AUDIO_SAMPLE_RATE * USER_AUDIO_SECS_PER_CHUNK)
 
-AGENT_AUDIO_SAMPLE_RATE = 16000
+AGENT_AUDIO_SAMPLE_RATE = os.environ.get("AGENT_AUDIO_SAMPLE_RATE")
 AGENT_AUDIO_BYTES_PER_SEC = 2 * AGENT_AUDIO_SAMPLE_RATE
 
 SETTINGS = {
-    "type": "SettingsConfiguration",
-    "audio": {
-        "input": {
-            "encoding": "linear16",
-            "sample_rate": USER_AUDIO_SAMPLE_RATE,
-        },
-        "output": {
-            "encoding": "linear16",
-            "sample_rate": AGENT_AUDIO_SAMPLE_RATE,
-            "container": "none",
-        },
+  "type": "Settings",
+  "experimental": false,
+  "mip_opt_out": false,
+  "audio": {
+    "input": {
+      "encoding": "linear16",
+      "sample_rate": os.environ.get("USER_AUDIO_SAMPLE_RATE")
     },
-    "agent": {
-        "listen": {
-            "model": LISTEN
-        },
-        "think": {
-            "provider": {
-              "type": "custom",
-              "url": AZURE_URL,
-              "headers": [
-                {
-                  "key": "api-key",
-                  "value": os.environ.get("AZURE_OPENAI_API_KEY")
-                }
-              ]
-            },
-            "model": LLM_MODEL,
-            "instructions": PROMPT,
-        },
-        "speak": {
-            "model": VOICE
-        },
-    },
-    "context": {
-        "messages": [], # LLM message history (e.g. to restore existing conversation if websocket connection breaks)
-        "replay": False # whether to replay the last message, if it is an assistant message
+    "output": {
+      "encoding": "mp3",
+      "sample_rate": os.environ.get("AGENT_AUDIO_SAMPLE_RATE"),
+      "bitrate": os.environ.get("AGENT_AUDIO_BITRATE"),
+      "container": "none"
     }
+  },
+  "agent": {
+    "language": "en",
+    "listen": {
+      "provider": {
+        "type": "deepgram",
+        "model": os.environ.get("LISTEN"), # TODO model
+        "keyterms": ["hello", "goodbye"]
+      }
+    },
+    "think": {
+      "provider": {
+        "type": "custom",
+        "model": os.environ.get("LLM_MODEL"),
+        "temperature": os.environ.get("TEMPERATURE")
+      },
+      "endpoint": { # Optional for non-Deepgram LLM providers. When present, must include url field and headers object
+        "url": os.environ.get("AZURE_OPENAI_ENDPOINT"),
+        "headers": [
+          {
+            "key": "api-key",
+            "value": os.environ.get("AZURE_OPENAI_API_KEY")
+          }
+        ]
+      },
+      "instructions": os.environ.get("PROMPT"), # TODO prompt
+      # "context_length": os.environ.get("CONTEXT_LENGTH"),  # Optional and can only be used when a custom think endpoint is used. Use max for maximum context length
+    },
+    "speak": {
+      "model": os.environ.get("VOICE"),
+    },
+    "greeting": "Hello! How can I help you today?"
+  }
 }
 
 mic_audio_queue = asyncio.Queue()

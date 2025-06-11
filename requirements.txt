@@ -1,4 +1,6 @@
+# Note: PyAudio requires PortAudio library to be installed first: brew install portaudio
 PyAudio==0.2.14
 websockets==12.0
 janus==1.0.0
 requests==2.32.3
+python-dotenv==1.0.0

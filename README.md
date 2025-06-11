@@ -1,6 +1,6 @@
 # Voice Agent with Azure OpenAI Services
 
- [![Discord](https://dcbadge.vercel.app/api/server/xWRaCDBtW4?style=flat)](https://discord.gg/xWRaCDBtW4)
+[![Discord](https://dcbadge.vercel.app/api/server/xWRaCDBtW4?style=flat)](https://discord.gg/xWRaCDBtW4)
 
 A basic example of using Deepgram's Voice Agent API with OpenAI Azure.
 
@@ -20,31 +20,35 @@ This is a Python client for interacting with Deepgram's Voice Agent API and Azur
 
 1. Install the dependencies in `requirements.txt`. For example, on Ubuntu using a virtual environment:
 
-    ```bash
-    python3 -m venv venv
-    source venv/bin/activate
-    pip install -r requirements.txt
-    ```
+   ```bash
+   python -m venv venv
+   # Windows
+   .\venv\Scripts\activate
+   # macOS/Linux
+   source venv/bin/activate
+   pip install -r requirements.txt
+   ```
 
 2. Set an environment variable with your Deepgram API key:
 
-    ```bash
+   ```bash
     export DEEPGRAM_API_KEY=<your-key-here>
     ```
 3. Set an environment variable with your Azure OpenAI Services API key:
 
-    ```bash
+   ```bash
     export AZURE_OPENAI_API_KEY=<your-key-here>
     ```
 
-3. Run the client:
+4. Run the client:
 
-    ```bash
+   ```bash
     python3 client.py
-    ```
+   ```
 
-4. Start talking into your mic. This client doesn't have echo cancellation; you'll want to use headphones so the agent doesn't hear itself and think it's user speech.
+5. Start talking into your mic. This client doesn't have echo cancellation; you'll want to use headphones so the agent doesn't hear itself and think it's user speech.
 
+### Code Style
 
 ## Development and Contributing
 
@@ -63,4 +67,9 @@ project, let us know! You can either:
 - [Join the Deepgram Github Discussions Community](https://github.com/orgs/deepgram/discussions)
 - [Join the Deepgram Discord Community](https://discord.gg/xWRaCDBtW4)
 
-[license]: LICENSE.txt
+For support, please:
+- [Open an issue](https://github.com/your-username/voice-agent-azure-open-ai-services/issues)
+- Join our [Discord community](https://discord.gg/xWRaCDBtW4)
+- Check the [Deepgram documentation](https://developers.deepgram.com/docs)
+
+[license]: [MIT](LICENSE
